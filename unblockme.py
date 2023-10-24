@@ -285,6 +285,7 @@ def heur_num_blocks_blocking(state):
     if state.index == 6324:
         pass
     num_moves = 0
+    bonus = 0
     # get the position of the square to the right of the target block
     target_column = state.target_block.position[1] + TARGET_LENGTH
     # find the number of blocks in front of the target block
@@ -312,9 +313,14 @@ def heur_num_blocks_blocking(state):
                 else:
                     # if we can go either way, we want the minimum
                     num_moves += min(num_up, num_down)
+                if num_up > 1 or num_down > 1:
+                    num_moves -= bonus
     # add the distance from the target block to the goal
-    num_moves += BOARD_COLUMNS - target_column
-    return num_moves
+    #num_moves += BOARD_COLUMNS - target_column
+    #return num_moves
+    weight = 1
+    heuristic_value = (BOARD_COLUMNS - target_column) + (weight * num_moves)
+    return heuristic_value
 
 
 def unblockme_goal_fn(state):
